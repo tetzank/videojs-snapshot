@@ -28,7 +28,7 @@ function snapshot(options) {
 		player.el().blur();
 		// switch control bar to drawing controls
 		player.controlBar.hide();
-		player.drawCtrl.show();
+		drawCtrl.show();
 		// display canvas
 		container.show();
 
@@ -54,30 +54,31 @@ function snapshot(options) {
 		canvas_bg.el().style.maxHeight = rect.height +"px";
 	};
 	// camera icon on normal player control bar
-	var snap = player.controlBar.addChild('button');
-	snap.addClass("vjs-snapshot-button");
-	snap.on('click', player.snap);
+	var snap_btn = player.controlBar.addChild('button');
+	snap_btn.addClass("vjs-snapshot-button");
+	snap_btn.on('click', player.snap);
 
 	// drawing controls
 	var tool = 'crop';
 	function toolChange(event){
-		var active_tool = player.drawCtrl.el().querySelector('.vjs-tool-active');
+		var active_tool = drawCtrl.el().querySelector('.vjs-tool-active');
 		active_tool.classList.remove('vjs-tool-active');
 		event.target.classList.add('vjs-tool-active');
 		tool = event.target.dataset.value;
 	}
 
-	//FIXME: really necessary to add to player object?
-	player.drawCtrl = player.addChild(
+	//draw control bar
+	var drawCtrl = player.addChild(
 		new videojs.Component(player, {
 			el: videojs.Component.prototype.createEl(null, {
 				className: 'vjs-control-bar vjs-drawing-ctrl',
 			}),
 		})
 	);
-	player.drawCtrl.hide();
+	drawCtrl.hide();
 
-	var color = player.drawCtrl.addChild(
+	// choose color, used everywhere: painting, border color of cropbox, ...
+	var color = drawCtrl.addChild(
 		new videojs.Component(player, {
 			el: videojs.Component.prototype.createEl('input', {
 				className: 'vjs-control', type: 'color', value: '#df4b26', title: 'color'
@@ -88,7 +89,8 @@ function snapshot(options) {
 		context_draw.strokeStyle = color.el().value;
 	});
 
-	var size = player.drawCtrl.addChild(
+	// choose size, used everywhere: line width, text size
+	var size = drawCtrl.addChild(
 		new videojs.Component(player, {
 			el: videojs.Component.prototype.createEl('input', {
 				className: 'vjs-control', type: 'number', value: '10', title: 'line width, text size, ...'
@@ -110,12 +112,12 @@ function snapshot(options) {
 			this.on('click', toolChange);
 		}
 	});
-	var brush  = player.drawCtrl.addChild(new videojs.ToolButton(player, {tool: "brush", title: "freehand drawing"}));
-	var rect   = player.drawCtrl.addChild(new videojs.ToolButton(player, {tool: "rect",  title: "draw rectangle from top left to bottom right"}));
-	var crop   = player.drawCtrl.addChild(new videojs.ToolButton(player, {tool: "crop",  title: "select area and click selection to crop"}));
+	var brush  = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "brush", title: "freehand drawing"}));
+	var rect   = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "rect",  title: "draw rectangle from top left to bottom right"}));
+	var crop   = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "crop",  title: "select area and click selection to crop"}));
 	crop.addClass("vjs-tool-active");
-	var text   = player.drawCtrl.addChild(new videojs.ToolButton(player, {tool: "text",  title: "select area, type message and then click somewhere else"}));
-	var eraser = player.drawCtrl.addChild(new videojs.ToolButton(player, {tool: "eraser",title: "erase drawing in clicked location"}));
+	var text   = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "text",  title: "select area, type message and then click somewhere else"}));
+	var eraser = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "eraser",title: "erase drawing in clicked location"}));
 
 	function combineDrawing(encoding){
 		//blit canvas and open new tab with image
@@ -128,7 +130,7 @@ function snapshot(options) {
 		window.open(canvas_tmp.toDataURL(encoding));
 	}
 
-	var dljpeg = player.drawCtrl.addChild(
+	var dljpeg = drawCtrl.addChild(
 		new videojs.Component(player, {
 			el: videojs.Component.prototype.createEl(null, {
 				className: 'vjs-control vjs-button', innerHTML: 'JPEG', title: 'open new tab with jpeg image'
@@ -136,7 +138,7 @@ function snapshot(options) {
 		})
 	);
 	dljpeg.on('click', function(){ combineDrawing("image/jpeg"); });
-	var dlpng = player.drawCtrl.addChild(
+	var dlpng = drawCtrl.addChild(
 		new videojs.Component(player, {
 			el: videojs.Component.prototype.createEl(null, {
 				className: 'vjs-control vjs-button', innerHTML: 'PNG', title: 'open new tab with png image'
@@ -147,15 +149,16 @@ function snapshot(options) {
 
 	//TODO: scale display
 
-	var close = player.drawCtrl.addChild('button');
+	var close = drawCtrl.addChild('button');
 	close.addClass("vjs-drawing-close");
 	close.el().title = "close screenshot and return to video";
 	close.on('click', function(){
 		// hide all canvas stuff
 		container.hide();
 		// switch back to normal player controls
-		player.drawCtrl.hide();
+		drawCtrl.hide();
 		player.controlBar.show();
+		player.el().focus();
 	});
 
 	// canvas stuff
