@@ -7,9 +7,9 @@ function snapshot(options) {
 	var container, scale;
 	//FIXME: add some kind of assert for video, if flash is used it's not working
 
-	//TODO: add better prefix for all new css class, probably vjs-snapshot
-	//TODO: add scale display, not really needed but nice to have
 	//TODO: center canvas or at least use some colored background, otherwise video still image distracts too much
+	//TODO: canvas container gets on top of drawCtrl which is bad, either add it the other way to player or z-index on drawCtrl
+	//TODO: add better prefix for all new css class, probably vjs-snapshot
 	//TODO: break this large file up into smaller ones, e.g. container,
 
 	function updateScale(){
@@ -17,7 +17,7 @@ function snapshot(options) {
 		var scalew = canvas_draw.el().width / rect.width;
 		var scaleh = canvas_draw.el().height / rect.height;
 		scale = Math.max(Math.max(scalew, scaleh), 1);
-// 		scale_txt.innerHTML = (Math.round(1/scale*100)/100) +"x";
+		scale_txt.el().innerHTML = (Math.round(1/scale*100)/100) +"x";
 	}
 
 	// take snapshot of video and show all drawing elements
@@ -147,8 +147,7 @@ function snapshot(options) {
 	);
 	dlpng.on('click', function(){ combineDrawing("image/png"); });
 
-	//TODO: scale display
-
+	// close button leading back to normal video play back
 	var close = drawCtrl.addChild('button');
 	close.addClass("vjs-drawing-close");
 	close.el().title = "close screenshot and return to video";
@@ -160,6 +159,15 @@ function snapshot(options) {
 		player.controlBar.show();
 		player.el().focus();
 	});
+
+	// scale display
+	var scale_txt = drawCtrl.addChild(
+		new videojs.Component(player, {
+			el: videojs.Component.prototype.createEl(null, {
+				className: 'vjs-scale', innerHTML: '1', title: 'scale factor'
+			}),
+		})
+	);
 
 	// canvas stuff
 	container = player.addChild(
