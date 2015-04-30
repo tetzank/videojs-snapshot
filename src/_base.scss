@@ -1,0 +1,93 @@
+#canvas_parent{
+	background-color: white;
+}
+.vjs-canvas-container{
+	position: relative;
+	cursor: crosshair;
+
+	canvas{
+		position: absolute;
+	}
+	div{
+		justify-content: center; /* align horizontal */
+		align-items: center; /* align vertical */
+
+		position: absolute;
+		font-weight: bold;
+		text-shadow:
+			-1px -1px 0 #000,
+			 1px -1px 0 #000,
+			-1px  1px 0 #000,
+			 1px  1px 0 #000;
+		cursor: pointer;
+		z-index: 1;
+	}
+	textarea{
+		position: absolute;
+		background: none;
+		padding: 0;
+		margin: 0;
+		outline-width: 0;
+		overflow: hidden;
+		z-index: 1;
+	}
+}
+
+.vjs-drawing-ctrl{
+	.vjs-control{
+		cursor: pointer;
+	}
+	&>input[type="color"]{
+		background-color: rgba(0,0,0,0);
+		border: 0;
+		padding-left: 3px;
+		height: 2em;
+	}
+	&>input[type="number"]{
+		background-color: rgba(0,0,0,0);
+		border: 0;
+		color: #ccc;
+		width: 40px;
+		height: 2em;
+	}
+	&>.vjs-button{
+		display: flex;
+		justify-content: center; /* align horizontal */
+		align-items: center; /* align vertical */
+
+		&:hover{
+			text-shadow: 0 0 1em white;
+		}
+	}
+	&>.vjs-scale{
+		display: flex;
+		justify-content: center; /* align horizontal */
+		align-items: center; /* align vertical */
+		position: relative;
+		height: 3em;
+		width: 4em;
+		float: right;
+	}
+}
+
+.vjs-tool-active{
+	color: green;
+}
+
+.vjs-default-skin{
+	.vjs-snapshot-button{
+		@extend %icon_camera;
+		float: right;
+	}
+
+	.vjs-drawing-brush  { @extend %icon_draw_paintbrush; }
+	.vjs-drawing-rect   { @extend %icon_input; }
+	.vjs-drawing-crop   { @extend %icon_slice; }
+	.vjs-drawing-text   { @extend %icon_text; }
+	.vjs-drawing-eraser { @extend %icon_clean; }
+
+	.vjs-drawing-close{
+		@extend %icon_close;
+		float: right;
+	}
+}

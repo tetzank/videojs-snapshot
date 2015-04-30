@@ -1,0 +1,33 @@
+<% if (fontfaceStyles) { %>
+<% if (fontSrc1 && embed.length) { %>
+@font-face {
+	font-family:"<%= fontBaseName %>";
+	src:<%= fontSrc1 %>;
+	font-weight:normal;
+	font-style:normal;
+}
+<% } %>@font-face {
+	font-family:"<%= fontBaseName %>";<% if (fontSrc1) { %>
+	src:<%= fontSrc1 %>;<% }%>
+	src:<%= fontSrc2 %>;
+	font-weight:normal;
+	font-style:normal;
+}
+<% } %>
+
+%<%= baseClass %>{
+	font-family:"<%= fontBaseName %>";
+	/* HACK: there's much unused space around icon, need to make it larger and then move up a bit */
+	font-size: 3em;
+	margin-top: -0.5em;
+}
+
+/* Icons */
+<% for (var glyphIdx = 0; glyphIdx < glyphs.length; glyphIdx++) { %>
+%<%= classPrefix %><%= glyphs[glyphIdx] %>{
+	&::before{
+		@extend %<%= baseClass %>;
+		content: "<% if (addLigatures) { %><%= glyphs[glyphIdx] %><% } else { %>\<%= codepoints[glyphIdx] %><% } %>"
+	}
+}
+<% } %>
