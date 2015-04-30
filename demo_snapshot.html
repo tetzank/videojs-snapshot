@@ -28,7 +28,7 @@
 	
 	document.getElementById('files').addEventListener('change', function(event){
 		var file = event.target.files[0];
-		player.src(URL.createObjectURL(file));
+		player.src({ type: "video/mp4", src: URL.createObjectURL(file)});
 	}, false);
 
 </script>
