@@ -45,6 +45,13 @@ function snapshot(options) {
 		canvas_bg.el().width = video.videoWidth;
 		canvas_bg.el().height = video.videoHeight;
 		context_bg.drawImage(video, 0, 0);
+
+		// still fit into player element
+		var rect = video.getBoundingClientRect(); // use bounding rect instead of player.width/height because of fullscreen
+		canvas_draw.el().style.maxWidth  = rect.width  +"px";
+		canvas_draw.el().style.maxHeight = rect.height +"px";
+		canvas_bg.el().style.maxWidth  = rect.width  +"px";
+		canvas_bg.el().style.maxHeight = rect.height +"px";
 	};
 	// camera icon on normal player control bar
 	var snap = player.controlBar.addChild('button');
