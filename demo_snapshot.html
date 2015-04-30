@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Video.js | HTML5 Video Player</title>
+
+	<link href="http://vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+	<script src="http://vjs.zencdn.net/4.12/video.js"></script>
+
+	<link href="./build/videojs-snapshot.css" rel="stylesheet" type="text/css"/>
+	<script src="./build/videojs-snapshot.js"></script>
+</head>
+<body>
+
+<p>Choose mp4 files:</p>
+<input type="file" id="files" name="files[]" accept="video/mp4" />
+<hr/>
+
+
+<video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered" controls="controls" preload="auto" width="640" height="480">
+	<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+</video>
+
+<script>
+	var player = videojs('example_video_1');
+	player.snapshot();
+	
+	document.getElementById('files').addEventListener('change', function(event){
+		var file = event.target.files[0];
+		player.src(URL.createObjectURL(file));
+	}, false);
+
+</script>
+
+<style>
+</style>
+
+
+</body>
+</html>
