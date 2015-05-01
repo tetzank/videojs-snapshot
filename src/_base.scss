@@ -81,6 +81,7 @@
 	.vjs-snapshot-button{
 		@extend %icon_camera;
 		float: right;
+		cursor: pointer;
 	}
 
 	.vjs-drawing-brush  { @extend %icon_draw_paintbrush; }

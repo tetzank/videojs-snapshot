@@ -55,6 +55,7 @@ function snapshot(options) {
 	// camera icon on normal player control bar
 	var snap_btn = player.controlBar.addChild('button');
 	snap_btn.addClass("vjs-snapshot-button");
+	snap_btn.el().title = "Take snapshot";
 	snap_btn.on('click', player.snap);
 
 	// drawing controls
@@ -98,6 +99,9 @@ function snapshot(options) {
 			}),
 		})
 	);
+	size.on('keydown', function(e){ // don't fire player shortcuts when size input has focus
+		e.stopPropagation();
+	});
 	size.on('change', function(e){
 		context_draw.lineWidth = size.el().value / 2;
 	});
