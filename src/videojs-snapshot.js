@@ -7,8 +7,6 @@ function snapshot(options) {
 	var container, scale;
 	//FIXME: add some kind of assert for video, if flash is used it's not working
 
-	//TODO: center canvas or at least use some colored background, otherwise video still image distracts too much
-	//TODO: canvas container gets on top of drawCtrl which is bad, either add it the other way to player or z-index on drawCtrl
 	//TODO: add better prefix for all new css class, probably vjs-snapshot
 	//TODO: break this large file up into smaller ones, e.g. container,
 
@@ -30,7 +28,7 @@ function snapshot(options) {
 		player.controlBar.hide();
 		drawCtrl.show();
 		// display canvas
-		container.show();
+		parent.show();
 
 		// canvas for drawing, it's separate from snapshot because of delete
 		canvas_draw.el().width = video.videoWidth;
@@ -66,6 +64,15 @@ function snapshot(options) {
 		event.target.classList.add('vjs-tool-active');
 		tool = event.target.dataset.value;
 	}
+
+	// add canvas parent container before draw control bar, so bar gets on top
+	var parent = player.addChild(
+		new videojs.Component(player, {
+			el: videojs.Component.prototype.createEl(null, {
+				className: 'vjs-canvas-parent' /*TODO*/
+			}),
+		})
+	);
 
 	//draw control bar
 	var drawCtrl = player.addChild(
@@ -153,7 +160,7 @@ function snapshot(options) {
 	close.el().title = "close screenshot and return to video";
 	close.on('click', function(){
 		// hide all canvas stuff
-		container.hide();
+		parent.hide();
 		// switch back to normal player controls
 		drawCtrl.hide();
 		player.controlBar.show();
@@ -170,7 +177,7 @@ function snapshot(options) {
 	);
 
 	// canvas stuff
-	container = player.addChild(
+	container = parent.addChild(
 		new videojs.Component(player, {
 			el: videojs.Component.prototype.createEl(null, {
 				className: 'vjs-canvas-container' /*TODO*/
@@ -267,7 +274,7 @@ function snapshot(options) {
 		textbox.el().value = "";
 	});
 
-	container.hide();
+	parent.hide();
 	canvas_rect.hide();
 	cropbox.hide();
 	textbox.hide();
