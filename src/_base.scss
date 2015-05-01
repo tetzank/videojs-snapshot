@@ -89,6 +89,11 @@
 	.vjs-drawing-text   { @extend %icon_text; }
 	.vjs-drawing-eraser { @extend %icon_clean; }
 
+	.vjs-drawing-scaler{
+		@extend %icon_fullscreen_box;
+		margin-left: 20px;
+	}
+
 	.vjs-drawing-close{
 		@extend %icon_close;
 		float: right;

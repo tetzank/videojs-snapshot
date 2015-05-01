@@ -7,7 +7,6 @@ function snapshot(options) {
 	var container, scale;
 	//FIXME: add some kind of assert for video, if flash is used it's not working
 
-	//TODO: add scale tool
 	//TODO: add better prefix for all new css class, probably vjs-snapshot
 	//TODO: break this large file up into smaller ones, e.g. container, ...
 	//TODO: make it possible to drag boxes also from bottom right to top left
@@ -128,6 +127,31 @@ function snapshot(options) {
 	var text   = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "text",  title: "select area, type message and then click somewhere else"}));
 	var eraser = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "eraser",title: "erase drawing in clicked location"}));
 
+	var scaler = drawCtrl.addChild(
+		new videojs.Component(player, {
+			el: videojs.Component.prototype.createEl(null, {
+				className: 'vjs-control vjs-drawing-scaler', title: 'scale image'
+			}),
+		})
+	);
+	scaler.on('click', function(e){
+		var w = canvas_draw.el().width, h = canvas_draw.el().height;
+		var scalew = window.prompt("Current image size is "+w+"x"+h+" . New width?", w);
+		scalew = parseInt(scalew, 10);
+		if(!isNaN(scalew)){
+			var factor = scalew / w;
+			var width  = factor * w |0;
+			var height = factor * h |0;
+
+			var r = scaleCropCanvas(0, 0, w, h, width, height, canvas_bg, context_bg);
+			canvas_bg = r[0]; context_bg = r[1];
+			r = scaleCropCanvas(0, 0, w, h, width, height, canvas_draw, context_draw);
+			canvas_draw = r[0]; context_draw = r[1];
+			updateScale();
+		}
+		// just ignore
+	});
+
 	function combineDrawing(encoding){
 		//blit canvas and open new tab with image
 		var canvas_tmp = document.createElement('canvas');
@@ -216,21 +240,24 @@ function snapshot(options) {
 		})
 	);
 	// crop handling, create new canvas and replace old one
-	function cropCanvas(canvas, context){
+	function scaleCropCanvas(left, top, width, height, newwidth, newheight, canvas, context){
 // 		var newcanvas = document.createElement('canvas');
 		var newcanvas = new videojs.Component(player, { // FIXME: that's quite silly
 			el: videojs.Component.prototype.createEl('canvas', {
 			}),
 		});
-		newcanvas.el().width = scale * cropbox.el().offsetWidth;
-		newcanvas.el().height = scale * cropbox.el().offsetHeight;
 		var rect = player.el().getBoundingClientRect();
 		newcanvas.el().style.maxWidth  = rect.width  +"px";
 		newcanvas.el().style.maxHeight = rect.height +"px";
 
+		newcanvas.el().width = newwidth;
+		newcanvas.el().height = newheight;
+
 		var ctx = newcanvas.el().getContext("2d");
-		ctx.drawImage(canvas.el(), scale*cropbox.el().offsetLeft, scale*cropbox.el().offsetTop,
-						newcanvas.el().width, newcanvas.el().height, 0, 0, newcanvas.el().width, newcanvas.el().height);
+		ctx.drawImage(canvas.el(),
+			left, top, width, height,
+			0, 0, newwidth, newheight
+		);
 
 // 		container.replaceChild(newcanvas, canvas);
 		container.removeChild(canvas);
@@ -244,9 +271,13 @@ function snapshot(options) {
 		return [newcanvas, ctx];
 	}
 	cropbox.on('mousedown', function(e){
-		var r = cropCanvas(canvas_bg, context_bg);
+		var left   = scale * cropbox.el().offsetLeft  |0;
+		var top    = scale * cropbox.el().offsetTop   |0;
+		var width  = scale * cropbox.el().offsetWidth |0;
+		var height = scale * cropbox.el().offsetHeight|0;
+		var r = scaleCropCanvas(left, top, width, height, width, height, canvas_bg, context_bg);
 		canvas_bg = r[0]; context_bg = r[1];
-		r = cropCanvas(canvas_draw, context_draw);
+		r = scaleCropCanvas(left, top, width, height, width, height, canvas_draw, context_draw);
 		canvas_draw = r[0]; context_draw = r[1];
 		updateScale();
 
