@@ -7,8 +7,10 @@ function snapshot(options) {
 	var container, scale;
 	//FIXME: add some kind of assert for video, if flash is used it's not working
 
+	//TODO: add scale tool
 	//TODO: add better prefix for all new css class, probably vjs-snapshot
-	//TODO: break this large file up into smaller ones, e.g. container,
+	//TODO: break this large file up into smaller ones, e.g. container, ...
+	//TODO: make it possible to drag boxes also from bottom right to top left
 
 	function updateScale(){
 		var rect = video.getBoundingClientRect();
@@ -57,13 +59,6 @@ function snapshot(options) {
 	snap_btn.on('click', player.snap);
 
 	// drawing controls
-	var tool = 'crop';
-	function toolChange(event){
-		var active_tool = drawCtrl.el().querySelector('.vjs-tool-active');
-		active_tool.classList.remove('vjs-tool-active');
-		event.target.classList.add('vjs-tool-active');
-		tool = event.target.dataset.value;
-	}
 
 	// add canvas parent container before draw control bar, so bar gets on top
 	var parent = player.addChild(
@@ -108,6 +103,13 @@ function snapshot(options) {
 		context_draw.lineWidth = size.el().value / 2;
 	});
 
+	var tool = 'brush';
+	function toolChange(event){
+		var active_tool = drawCtrl.el().querySelector('.vjs-tool-active');
+		active_tool.classList.remove('vjs-tool-active');
+		event.target.classList.add('vjs-tool-active');
+		tool = event.target.dataset.value;
+	}
 	videojs.ToolButton = videojs.Button.extend({
 		init: function(p, options) {
 			videojs.Button.call(this, p, options);
@@ -120,9 +122,9 @@ function snapshot(options) {
 		}
 	});
 	var brush  = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "brush", title: "freehand drawing"}));
+	brush.addClass("vjs-tool-active");
 	var rect   = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "rect",  title: "draw rectangle from top left to bottom right"}));
 	var crop   = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "crop",  title: "select area and click selection to crop"}));
-	crop.addClass("vjs-tool-active");
 	var text   = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "text",  title: "select area, type message and then click somewhere else"}));
 	var eraser = drawCtrl.addChild(new videojs.ToolButton(player, {tool: "eraser",title: "erase drawing in clicked location"}));
 
