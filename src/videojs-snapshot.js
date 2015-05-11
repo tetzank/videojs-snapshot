@@ -135,7 +135,7 @@ function snapshot(options) {
 		new videojs.Component(player, {
 			el: videojs.Component.prototype.createEl(null, {
 				className: 'vjs-control vjs-drawing-scaler', title: 'scale image'
-			}),
+			})
 		})
 	);
 	scaler.on('click', function(e){
@@ -313,7 +313,7 @@ function snapshot(options) {
 
 	parent.hide();
 	canvas_rect.hide();
-	cropbox.hide();
+	cropbox.el().style.display = "none";
 	textbox.hide();
 
 	// TODO: draw functions
@@ -351,7 +351,7 @@ function snapshot(options) {
 				break;
 			case "text":
 				// if shown already, loose focus and draw it first, otherwise it gets drawn at mousedown
-				if(textbox.el().style.display == "none"){
+				if(textbox.hasClass("vjs-hidden")){
 					textbox.el().style.width = 0;
 					textbox.el().style.height = 0;
 					textbox.el().style.left = x + "px";
