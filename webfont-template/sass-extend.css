@@ -17,9 +17,9 @@
 
 %<%= baseClass %>{
 	font-family:"<%= fontBaseName %>";
-	/* HACK: there's much unused space around icon, need to make it larger and then move up a bit */
+	/* there's much unused space around icon, need to make it larger, line-height prevents it moving down, vjs has 2 */
 	font-size: 3em;
-	margin-top: -0.5em;
+	line-height: 1;
 }
 
 /* Icons */
