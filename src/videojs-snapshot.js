@@ -301,7 +301,7 @@ function snapshot(options) {
 	// draw text when textbox looses focus
 	textbox.on('blur', function(e){
 		context_draw.fillStyle = color.el().value;
-		context_draw.font = scale*size.el().value +"px sans-serif";
+		context_draw.font = (scale * size.el().value*2) +"px sans-serif";
 		context_draw.textBaseline = "top";
 		context_draw.fillText(textbox.el().value,
 				scale*textbox.el().offsetLeft + scale,
@@ -313,7 +313,7 @@ function snapshot(options) {
 
 	parent.hide();
 	canvas_rect.hide();
-	cropbox.el().style.display = "none";
+	cropbox.hide();
 	textbox.hide();
 
 	// TODO: draw functions
@@ -348,6 +348,7 @@ function snapshot(options) {
 
 				cropbox.el().style.border = "1px dashed "+ color.el().value;
 				cropbox.el().style.color = color.el().value;
+				cropbox.show();
 				break;
 			case "text":
 				// if shown already, loose focus and draw it first, otherwise it gets drawn at mousedown
@@ -356,12 +357,11 @@ function snapshot(options) {
 					textbox.el().style.height = 0;
 					textbox.el().style.left = x + "px";
 					textbox.el().style.top = y + "px";
-					textbox.show();
 
 					textbox.el().style.border = "1px dashed "+ color.el().value;
 					textbox.el().style.color = color.el().value;
-					textbox.el().style.font = size.el().value +"px sans-serif";
-// 					textbox.el().style.lineHeight = size.el().value +"px";
+					textbox.el().style.font = (size.el().value*2) +"px sans-serif";
+					textbox.show();
 				}
 				break;
 			case "eraser":
