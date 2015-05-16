@@ -112,6 +112,8 @@ function snapshot(options) {
 		active_tool.classList.remove('vjs-tool-active');
 		event.target.classList.add('vjs-tool-active');
 		tool = event.target.dataset.value;
+		// always hide cropbox, textbox is hidden automatically as it blurs
+		cropbox.hide();
 	}
 	videojs.ToolButton = videojs.Button.extend({
 		init: function(p, options) {
@@ -189,6 +191,8 @@ function snapshot(options) {
 	close.addClass("vjs-drawing-close");
 	close.el().title = "close screenshot and return to video";
 	close.on('click', function(){
+		// hide cropbox
+		cropbox.hide();
 		// hide all canvas stuff
 		parent.hide();
 		// switch back to normal player controls
@@ -243,6 +247,7 @@ function snapshot(options) {
 			}),
 		})
 	);
+	cropbox.el().style.display = "flex";
 	// crop handling, create new canvas and replace old one
 	function scaleCropCanvas(left, top, width, height, newwidth, newheight, canvas, context){
 // 		var newcanvas = document.createElement('canvas');
@@ -342,7 +347,6 @@ function snapshot(options) {
 			case "crop":
 				cropbox.el().style.width = 0;
 				cropbox.el().style.height = 0;
-				cropbox.el().style.display = "flex";
 				cropbox.el().style.left = x + "px";
 				cropbox.el().style.top = y + "px";
 
