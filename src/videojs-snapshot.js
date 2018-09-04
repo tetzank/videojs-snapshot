@@ -166,7 +166,9 @@ function snapshot(options) {
 		var ctx_tmp = canvas_tmp.getContext("2d");
 		ctx_tmp.drawImage(canvas_bg.el(), 0, 0);
 		ctx_tmp.drawImage(canvas_draw.el(), 0, 0);
-		window.open(canvas_tmp.toDataURL(encoding));
+		// open a new window with the encoded image
+		var imgWindow = window.open("");
+		imgWindow.document.write(`<html><head><title>snapshot - ${encoding}</title></head><body><p>Right-click and save image.</p><img src="${canvas_tmp.toDataURL(encoding)}" /></body></html>`);
 	}
 
 	var dljpeg = drawCtrl.addChild(
