@@ -1,12 +1,12 @@
 {
   "name": "videojs-snapshot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "devDependencies": {
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.3",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "grunt-webfont": "^1.6.0"
+    "grunt-contrib-uglify": "^2.3.0",
+    "grunt-webfont": "^1.7.2"
   }
 }

@@ -168,7 +168,7 @@ function snapshot(options) {
 		ctx_tmp.drawImage(canvas_draw.el(), 0, 0);
 		// open a new window with the encoded image
 		var imgWindow = window.open("");
-		imgWindow.document.write(`<html><head><title>snapshot - ${encoding}</title></head><body><p>Right-click and save image.</p><img src="${canvas_tmp.toDataURL(encoding)}" /></body></html>`);
+		imgWindow.document.write('<html><head><title>snapshot - '+ encoding +'</title></head><body><p>Right-click and save image.</p><img src="'+ canvas_tmp.toDataURL(encoding) +'" /></body></html>');
 	}
 
 	var dljpeg = drawCtrl.addChild(
