@@ -1,4 +1,4 @@
-<img height="80" src="https://raw.githubusercontent.com/tetzank/videojs-snapshot/master/logo.svg">
+<img height="80" src="https://raw.githubusercontent.com/tetzank/videojs-snapshot/master/logo.svg?sanitize=true">
 
 Video.js plugin to create snapshots of the video and draw on it
 
